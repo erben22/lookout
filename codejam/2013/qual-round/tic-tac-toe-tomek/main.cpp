@@ -1,18 +1,42 @@
 #include <cstdio>
 
-const unsigned int kBufferSize = 100;
-const unsigned int kNumRows = 4;
-const unsigned int kNumColumns = 4;
+#define NumObjects(x) sizeof(x)/sizeof(x[0])
+
+const int kBufferSize = 10;
+const int kNumRows = 4;
+const int kNumColumns = 4;
+const int kNumforMatch = 4;
+const char kWildcardSymbol = 'T';
 
 char dataSet[kNumRows][kNumColumns] = {0};
+
+bool IsSymbolMatch(char symbol, char testChar)
+{
+    return (((symbol == testChar) || (kWildcardSymbol == symbol)) ? 
+        true : false);
+}
+
+void BuildInput()
+{
+    for (int rowIndex = 0;  kNumRows > rowIndex;  ++rowIndex)
+    {
+        char inputLine[kBufferSize] = {0}; 
+        scanf("%s\n", inputLine);
+
+        for (int columnIndex = 0;  kNumColumns > columnIndex;  ++columnIndex)
+        {
+            dataSet[rowIndex][columnIndex] = inputLine[columnIndex];
+        }
+    }
+}
 
 bool IsCharPresent(char searchChar)
 {
     bool found = false;
 
-    for (unsigned int rowIndex = 0;  (kNumRows > rowIndex) && (false == found);  ++rowIndex)
+    for (int rowIndex = 0; (kNumRows > rowIndex) && (false == found);  ++rowIndex)
     {
-        for (unsigned int columnIndex = 0;  kNumColumns > columnIndex;  ++columnIndex)
+        for (int columnIndex = 0; kNumColumns > columnIndex;  ++columnIndex)
         {
             if (searchChar == dataSet[rowIndex][columnIndex])
             {
@@ -25,61 +49,186 @@ bool IsCharPresent(char searchChar)
     return found;
 }
 
+bool SeachForWinner(char symbol)
+{
+    bool foundWinner = false;
+
+    // Make a copy of the data set and change all wildcards to our search symbol:
+
+    char workingDataSet[kNumRows][kNumColumns] = {0};
+    
+    for (int rowIndex = 0;  kNumRows > rowIndex;  ++rowIndex)
+    {
+        for (int columnIndex = 0;  kNumColumns > columnIndex;  ++columnIndex)
+        {
+            workingDataSet[rowIndex][columnIndex] = dataSet[rowIndex][columnIndex];
+
+            if (kWildcardSymbol == workingDataSet[rowIndex][columnIndex])
+            {
+                workingDataSet[rowIndex][columnIndex] = symbol;
+            }
+        }
+    }
+
+    // Search rows:
+
+    for (int rowIndex = 0; (kNumRows > rowIndex) && (false == foundWinner);  ++rowIndex)
+    {
+        if (symbol == workingDataSet[rowIndex][0])
+        {
+            bool noMatch = false;
+
+            for (int columnIndex = 0; kNumColumns > columnIndex;  ++columnIndex)
+            {
+                if ((symbol != dataSet[rowIndex][columnIndex]) && 
+                    (kWildcardSymbol != workingDataSet[rowIndex][columnIndex]))
+                {
+                    noMatch = true;
+                    break;
+                }
+            }
+
+            if (false == noMatch)
+            {
+                // Winner winner chicken dinner.
+
+                foundWinner = true;
+                break;
+            }
+        }
+    }
+
+    // Search columns:
+    
+    for (int columnIndex = 0; (kNumColumns > columnIndex) && (false == foundWinner);  ++columnIndex)
+    {
+        if (symbol == workingDataSet[0][columnIndex])
+        {
+            bool noMatch = false;
+
+            for (int rowIndex = 0; kNumRows > rowIndex;  ++rowIndex)
+            {
+                if ((symbol != workingDataSet[rowIndex][columnIndex]) && 
+                    (kWildcardSymbol != workingDataSet[rowIndex][columnIndex]))
+                {
+                    noMatch = true;
+                    break;
+                }
+            }
+
+            if (false == noMatch)
+            {
+                // Winner winner chicken dinner.
+
+                foundWinner = true;
+                break;
+            }
+        }
+    }
+
+    // Search diagonals:
+
+    int rowIndex = 0;
+    int columnIndex = 0;
+    int numMatched = 0;
+
+    if ((false == foundWinner) && (IsSymbolMatch(symbol, workingDataSet[rowIndex][columnIndex])))
+    {
+        ++numMatched;
+        //printf("Searching first diagonals for %c\n", symbol);
+
+        for (int matchIndex = 0; kNumforMatch > matchIndex;  ++matchIndex)
+        {
+            // Check row + 1, col + 1
+
+            if ((symbol == workingDataSet[rowIndex + 1][columnIndex + 1]) || 
+                (kWildcardSymbol == workingDataSet[rowIndex + 1][columnIndex + 1]))
+            {
+                //printf("Matched %c at %d:%d\n", symbol, rowIndex, columnIndex);
+        
+                ++numMatched;
+            }
+
+            ++rowIndex;
+            ++columnIndex;
+        }
+
+        if (kNumforMatch == numMatched)
+        {
+            foundWinner = true;
+        }        
+    }
+
+    // Search the other diagonal:
+
+    rowIndex = kNumRows - 1;
+    columnIndex = 0;
+    numMatched = 0;
+
+    if ((false == foundWinner) && (IsSymbolMatch(symbol, workingDataSet[rowIndex][columnIndex])))
+    {        
+        ++numMatched;
+
+        for (int matchIndex = 0; kNumforMatch > matchIndex;  ++matchIndex)
+        {
+            // Check row - 1, col + 1
+
+            if ((symbol == workingDataSet[rowIndex - 1][columnIndex + 1]) || 
+                (kWildcardSymbol == workingDataSet[rowIndex - 1][columnIndex + 1]))
+            {
+                ++numMatched;
+            }
+
+            --rowIndex;
+            ++columnIndex;
+        }
+
+        if (kNumforMatch == numMatched)
+        {
+            foundWinner = true;
+        }
+    }
+
+    return foundWinner;
+}
+
 int main()
 {
-    int numInput= 0; 
+    int numInput = 0; 
     scanf("%d\n", &numInput);
 
-    for (unsigned int inputIndex = 1; numInput >= inputIndex; ++inputIndex) 
+    for (int inputIndex = 1; numInput >= inputIndex; ++inputIndex) 
     {
-        // Build a data set from the current input:
+        BuildInput();
 
-        for (unsigned int rowIndex = 0;  kNumRows > rowIndex;  ++rowIndex)
+        char playingSymbols[] = {'X', 'O'};
+        char winner = '0';
+
+        for (int symbolIndex = 0;  NumObjects(playingSymbols) > symbolIndex;  ++symbolIndex)
         {
-            static char inputLine[kBufferSize] = {0}; 
-            scanf("%s\n", inputLine);
-
-            printf("Input %d is: %s\n", inputIndex, inputLine);
-
-            for (unsigned int columnIndex = 0;  kNumColumns > columnIndex;  ++columnIndex)
+            if (SeachForWinner(playingSymbols[symbolIndex]))
             {
-                dataSet[rowIndex][columnIndex] = inputLine[columnIndex];
+                winner = playingSymbols[symbolIndex];
+                break;
             }
         }
 
+        if ('0' == winner)
+        {
+            bool gameEnded = (false == IsCharPresent('.'));
 
-        // Now, operate on the data set.
-
-        bool tiePossible = IsCharPresent('.');
-
-        const unsigned int kMyRow = 2;
-        const unsigned int kMyColumn = 1;
-        
-        printf("Case #%d: entry at [%d][%d], is: \"%c\".  Tie possible: %d\n", inputIndex, 
-            kMyRow, kMyColumn, dataSet[kMyRow][kMyColumn], tiePossible);
-
+            if (gameEnded)
+            {
+                printf("Case #%d: Draw\n", inputIndex);
+            }
+            else
+            {
+                printf("Case #%d: Game has not completed\n", inputIndex);
+            }
+        }
+        else
+        {
+            printf("Case #%d: %c won\n", inputIndex, winner);
+        }
     }
 }
-
-
-/*
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-using namespace std;
-
-const char *a = "y qeez ejp mysljylc kd kxveddknmc re jsicpdrysi rbcpc ypc rtcsra dkh wyfrepkym veddknkmkrkcd de kr kd eoya kw aej tysr re ujdr lkgc jv";
-const char *b = "a zooq our language is impossible to understand there are twenty six factorial possibilities so it is okay if you want to just give up";
-
-int main() {
-  int tc; scanf("%d\n", &tc);
-  for(int tci = 0; tci < tc; tci++) {
-    static char str[109]; scanf("%[a-z ]\n", str);
-    for(int i = 0; str[i]; i++) {
-      str[i] = b[find(a, a+133, str[i])-a];
-    }
-    printf("Case #%d: %s\n", tci+1, str);
-  }
-  return 0;
-}
-*/
