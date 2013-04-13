@@ -65,6 +65,9 @@ bool SeachForWinner(char symbol)
 
             if (kWildcardSymbol == workingDataSet[rowIndex][columnIndex])
             {
+                printf("Changing %d:%d from %c to %c\n", rowIndex, columnIndex, 
+                    workingDataSet[rowIndex][columnIndex], symbol);
+
                 workingDataSet[rowIndex][columnIndex] = symbol;
             }
         }
@@ -80,7 +83,7 @@ bool SeachForWinner(char symbol)
 
             for (int columnIndex = 0; kNumColumns > columnIndex;  ++columnIndex)
             {
-                if ((symbol != dataSet[rowIndex][columnIndex]) && 
+                if ((symbol != workingDataSet[rowIndex][columnIndex]) && 
                     (kWildcardSymbol != workingDataSet[rowIndex][columnIndex]))
                 {
                     noMatch = true;
@@ -91,6 +94,8 @@ bool SeachForWinner(char symbol)
             if (false == noMatch)
             {
                 // Winner winner chicken dinner.
+
+                printf("Matched a row (%d) for %c\n", rowIndex, symbol);
 
                 foundWinner = true;
                 break;
@@ -120,6 +125,8 @@ bool SeachForWinner(char symbol)
             {
                 // Winner winner chicken dinner.
 
+                printf("Matched a col (%d) for %c\n", columnIndex, symbol);
+                
                 foundWinner = true;
                 break;
             }
@@ -135,17 +142,13 @@ bool SeachForWinner(char symbol)
     if ((false == foundWinner) && (IsSymbolMatch(symbol, workingDataSet[rowIndex][columnIndex])))
     {
         ++numMatched;
-        //printf("Searching first diagonals for %c\n", symbol);
 
-        for (int matchIndex = 0; kNumforMatch > matchIndex;  ++matchIndex)
+        for (int matchIndex = 1; kNumforMatch > matchIndex;  ++matchIndex)
         {
             // Check row + 1, col + 1
 
-            if ((symbol == workingDataSet[rowIndex + 1][columnIndex + 1]) || 
-                (kWildcardSymbol == workingDataSet[rowIndex + 1][columnIndex + 1]))
+            if (IsSymbolMatch(symbol, workingDataSet[rowIndex + 1][columnIndex + 1]))
             {
-                //printf("Matched %c at %d:%d\n", symbol, rowIndex, columnIndex);
-        
                 ++numMatched;
             }
 
@@ -155,6 +158,8 @@ bool SeachForWinner(char symbol)
 
         if (kNumforMatch == numMatched)
         {
+            printf("Matched first diag for %c\n", symbol);
+
             foundWinner = true;
         }        
     }
@@ -167,14 +172,18 @@ bool SeachForWinner(char symbol)
 
     if ((false == foundWinner) && (IsSymbolMatch(symbol, workingDataSet[rowIndex][columnIndex])))
     {        
+        printf("Checking second diag:\n");
+
         ++numMatched;
 
-        for (int matchIndex = 0; kNumforMatch > matchIndex;  ++matchIndex)
+        for (int matchIndex = 1; kNumforMatch > matchIndex;  ++matchIndex)
         {
             // Check row - 1, col + 1
 
-            if ((symbol == workingDataSet[rowIndex - 1][columnIndex + 1]) || 
-                (kWildcardSymbol == workingDataSet[rowIndex - 1][columnIndex + 1]))
+            printf("  Second diag: %d:%d is %c\n", rowIndex - 1, columnIndex + 1,
+                workingDataSet[rowIndex - 1][columnIndex + 1]);
+
+            if (IsSymbolMatch(symbol, workingDataSet[rowIndex - 1][columnIndex + 1]))
             {
                 ++numMatched;
             }
@@ -185,6 +194,8 @@ bool SeachForWinner(char symbol)
 
         if (kNumforMatch == numMatched)
         {
+            printf("Matched second diag for %c\n", symbol);
+
             foundWinner = true;
         }
     }
