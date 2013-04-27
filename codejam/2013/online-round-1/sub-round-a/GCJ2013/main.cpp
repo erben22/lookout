@@ -6,24 +6,29 @@
 
 int64_t PaintUsed(int64_t radius)
 {
-    return ((int)radius * (int)radius);
+    return (radius);
 }
 
-int64_t PaintRing(int64_t radius, int64_t paint)
+int PaintRing(int64_t radius, int64_t paint)
 {
-    int64_t paintLeft = paint - PaintUsed(radius);
-    if (paintLeft > 0)
+    int numRings = 0;
+
+    while (paint >= 0)
     {
-        return (1 + PaintRing(radius + 2, paintLeft));
+        paint -= PaintUsed(radius);
+        if (paint > 0)
+        {
+            ++numRings;
+        }
+        else if (paint == 0)
+        {
+            ++numRings;
+        }
+
+        radius += 2;
     }
-    else if (paintLeft == 0)
-    {
-        return 1;
-    }
-    else
-    {
-        return 0;
-    }
+
+    return numRings;
 }
 
 int main()
