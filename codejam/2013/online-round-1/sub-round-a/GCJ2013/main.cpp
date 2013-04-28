@@ -4,6 +4,8 @@
 #include <iomanip>
 #include <stdint.h>
 
+extern int correct_main();
+
 int64_t PaintUsed(int64_t radius)
 {
     return (radius);
@@ -33,6 +35,7 @@ int PaintRing(int64_t radius, int64_t paint)
 
 int main()
 {
+    /*
     freopen("data.in", "r" , stdin); 
     freopen("data.out", "w" , stdout);
     std::cout << std::fixed << std::setprecision(12);
@@ -49,5 +52,8 @@ int main()
         std::cout << "Case #" << inputIndex << ": " << PaintRing(radius, paint) << std::endl;
     }
 
-    return 0;
+    return 0
+    */
+
+    return correct_main();
 }
