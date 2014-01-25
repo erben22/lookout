@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{1E1EF7DA-95C4-40A7-9BB6-8C2A5D0F1F19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLine", "Libs\CommandLine\CommandLine.csproj", "{142291F6-0EC8-4A74-9C85-9305A15D2BF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,11 +21,16 @@ Global
 		{7A7167E9-3C7D-4800-8C99-28EA4632146A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A7167E9-3C7D-4800-8C99-28EA4632146A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A7167E9-3C7D-4800-8C99-28EA4632146A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{142291F6-0EC8-4A74-9C85-9305A15D2BF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142291F6-0EC8-4A74-9C85-9305A15D2BF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142291F6-0EC8-4A74-9C85-9305A15D2BF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142291F6-0EC8-4A74-9C85-9305A15D2BF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7A7167E9-3C7D-4800-8C99-28EA4632146A} = {2C9F9FE7-A47C-4C26-B038-DCA69AA93FE1}
+		{142291F6-0EC8-4A74-9C85-9305A15D2BF3} = {1E1EF7DA-95C4-40A7-9BB6-8C2A5D0F1F19}
 	EndGlobalSection
 EndGlobal
