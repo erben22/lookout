@@ -10,3 +10,10 @@
 *.lai
 *.la
 *.a
+
+# VS C# artifacts
+bin
+obj
+
+# VS Solution files
+.suo
