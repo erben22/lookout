@@ -2,6 +2,10 @@
 
 bool purchaseNewFarm(double farmCost, double currentRate, double boost, double winningAmount)
 {
+    // Determine if we need to purchase a new farm.  Calculate the time it
+    // will take to win with a new farm increasing our rate, and compare it
+    // to our current rate.
+    
     double secondsToFarm = farmCost / currentRate;
     double newRate = currentRate + boost;
     double secondsToWinWithNewFarm =
@@ -11,11 +15,6 @@ bool purchaseNewFarm(double farmCost, double currentRate, double boost, double w
         secondsToFarm + secondsToWinWithNewFarm;
     double timeToWinAtCurrentRate = (winningAmount / currentRate);
     
-    printf("    secondsToFarm(%0.7f), newRate(%0.7f), secondsToWinWithNewFarm(%0.7f)\n",
-           secondsToFarm, newRate, secondsToWinWithNewFarm);
-    printf("    timeToWinWithNewFarm(%0.7f), timeToWinAtCurrentRate(%0.7f)\n",
-           timeToWinWithNewFarm,  timeToWinAtCurrentRate);
-
     return (timeToWinWithNewFarm < timeToWinAtCurrentRate);
 }
 
@@ -23,38 +22,38 @@ double findResult(double cost, double boost, double winningAmount)
 {
     double timeToWin = 0.0;
     
-    printf("  Cookie Farms cost %0.7f.\n", cost);
-    printf("  CPS boost is %0.7f.\n", boost);
-    printf("  To win, you need %0.7f cookies.\n", winningAmount);
-    
     const double kStartCookies = 0.0;
     const double kInitialCookieRate = 2.0;
     
     if (winningAmount <= cost)
     {
+        // Short-circuit, if a farm costs more than we need to win, just
+        // stop here.
+        
         timeToWin = winningAmount / kInitialCookieRate;
     }
     else
     {
         double currentRate = kInitialCookieRate;
-        double numCookies = 0.0;
         
-        while (numCookies < winningAmount)
+        while (1)
         {
             if (purchaseNewFarm(cost, currentRate, boost, winningAmount))
             {
-                printf("   Purchasing new farm.\n");
-                printf("     PRE: timeToWin(%0.7f), currentRate now(%0.7f)\n", timeToWin, currentRate);
+                // Need to buy a new farm, so update our total time, and
+                // then buy the farm.  We do not have to track cookies
+                // at all, just the time to get to a new farm.
+                
                 timeToWin += cost / currentRate;
                 currentRate += boost;
-                printf("     POST: timeToWin(%0.7f), currentRate now(%0.7f)\n", timeToWin, currentRate);
             }
             else
             {
-                printf("   Can win without a new farm.\n");
-                printf("     PRE: timeToWin(%0.7f)\n", timeToWin);
+                // We do not need to buy a new farm.  Find out how much
+                // time we need to win at our current rate, and add that
+                // to the time we have accumulated so far farming.
+                
                 timeToWin += (winningAmount / currentRate);
-                printf("     POST: timeToWin(%0.7f)\n", timeToWin);
                 break;
             }
         }
@@ -68,7 +67,6 @@ int main()
 {
     double numTestCases = 0;
     scanf("%lf\n", &numTestCases);
-    //printf("Processing %f test cases...\n", numTestCases);
 
     for (int inputIndex = 1; numTestCases >= inputIndex; ++inputIndex)
     {
