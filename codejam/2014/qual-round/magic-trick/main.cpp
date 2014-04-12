@@ -24,6 +24,40 @@ std::string findCard(std::vector<unsigned int>& firstRow, std::vector<unsigned i
     
     std::string result(kBadMagician);
     
+    std::vector<unsigned int> compareList;
+    
+    std::vector<unsigned int>::const_iterator firstRowItor = firstRow.begin();
+    
+    while (firstRow.end() != firstRowItor)
+    {
+        std::vector<unsigned int>::const_iterator secondRowItor = secondRow.begin();
+        
+        while (secondRow.end() != secondRowItor)
+        {
+            if (*firstRowItor == *secondRowItor)
+            {
+                compareList.push_back(*firstRowItor);
+            }
+            
+            secondRowItor++;
+        }
+
+        firstRowItor++;
+    }
+    
+    if (compareList.size() == 1)
+    {
+        const unsigned int kMaxStringSize = 255;
+        char resultString[kMaxStringSize] = {0};
+        
+        snprintf(resultString, kMaxStringSize, "%u", compareList[0]);
+        result = resultString;
+    }
+    else if (compareList.size() == 0)
+    {
+        result = kCheaterCheater;
+    }
+    
     return result;
 }
 
@@ -70,7 +104,7 @@ int main()
             }
         }
 
-        dumpData(cardRow1);
+        //dumpData(cardRow1);
         
         unsigned int answerRow2 = 0;
         scanf("%u\n", &answerRow2);
@@ -102,7 +136,7 @@ int main()
             }
         }
         
-        dumpData(cardRow2);
+        //dumpData(cardRow2);
 
         printf("Case #%u: %s\n", inputIndex, findCard(cardRow1, cardRow2).c_str());
     }
