@@ -11,6 +11,15 @@
 *.la
 *.a
 
+# Compiled executables:
+*.out
+
+# Xcode symbol files:
+*.dSYM
+
+# OSX things:
+.DS_Store
+
 # VS C# artifacts
 bin
 obj
@@ -18,3 +27,6 @@ obj
 # VS Solution files
 .suo
 ATCSMon/ATCSMon-Image-Processor/ATCSMon-Image-Processor.v12.suo
+
+# Vagrant temp files and such:
+.vagrant
