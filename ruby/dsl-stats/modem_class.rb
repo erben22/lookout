@@ -1,0 +1,2 @@
+class ModemClass
+end
