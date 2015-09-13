@@ -15,8 +15,8 @@ require_relative 'modem_status_class'
 begin
   @main_url = 'http://192.168.2.1'
 
-  @browser = Watir::Browser.new :firefox
-  #b = Watir::Browser.new :phantomjs
+  #@browser = Watir::Browser.new :firefox
+  @browser = Watir::Browser.new :phantomjs
 
   @browser.goto(@main_url)
 
@@ -26,8 +26,9 @@ begin
   index_page = IndexPage.new(@browser)
   index_page.view_modem_status
 
-
-  @browser.table(:index => 0)[row][1].text.should include name
+  modem_status_page = ModemStatusClass.new(@browser)
+  modem_status_page.get_modem_status
+  modem_status_page.get_dsl_status
 
 
 rescue => exception

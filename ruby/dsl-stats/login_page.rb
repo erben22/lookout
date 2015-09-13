@@ -10,7 +10,7 @@ class LoginPage
   # +username+::
   # +password+::
 
-  def login_to_system(username='admin', password='blah')
+  def login_to_system(username='admin', password='')
     self.username = username
     self.password = password
     login
