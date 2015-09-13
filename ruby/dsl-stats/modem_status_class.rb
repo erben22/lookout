@@ -18,7 +18,8 @@ class ModemStatusClass
       @modem_status[key['Modem Parameter']] = key['Status']
     end
 
-    puts @modem_status
+    #puts "Modem status: #{@modem_status}"
+    @modem_status
   end
 
   def get_dsl_status
@@ -49,7 +50,30 @@ class ModemStatusClass
       @dsl_status["#{key['Levels']}-FarEnd"] = key['Far End']
     end
 
-    puts @dsl_status
+    #puts "DSL status: #{@dsl_status}"
+    @dsl_status
+  end
+
+  def get_internet_status
+    # Now get some internet status details
+    view_internet_status
+
+    @internet_status = {}
+
+    @browser.table(:index => 1).hashes.each do |key, value|
+      @internet_status[key['Internet Setting']] = key['Status']
+    end
+
+    @browser.table(:index => 2).hashes.each do |key, value|
+      @internet_status[key['PPP Parameter']] = key['Status']
+    end
+
+    @browser.table(:index => 3).hashes.each do |key, value|
+      @internet_status[key['PPP Parameter']] = key['Status']
+    end
+
+    #puts "Internet status: #{@internet_status}"
+    @internet_status
   end
 
 end
