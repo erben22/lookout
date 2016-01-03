@@ -48,8 +48,6 @@ rescue => exception
   puts "Backtrace:\n\t#{exception.backtrace.join("\n\t")}"
 end
 
-#@browser.close
-
 # Now that we have status of the modem in it's current state, let's publish our data...
 
 #client = Google::APIClient.new
@@ -120,3 +118,4 @@ ws.synchronize
 
 
 puts 'All done with the spreadsheet'
+@browser.close
