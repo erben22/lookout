@@ -16,57 +16,69 @@ require_relative 'login_page'
 require_relative 'index_page'
 require_relative 'wireless_setup_page'
 
+def log_message(msg)
+  current_time = Time.now.strftime("%Y-%m-%d %H:%M:%S")
+  puts "#{current_time}: #{msg}"
+end
+
+# Main program.
+
 begin
   @main_url = 'http://192.168.2.1'
 
-  puts "Launching browser..."
+  log_message "Launching browser..."
 
-  @browser = Watir::Browser.new :chrome
-  #@browser = Watir::Browser.new :phantomjs
+  #@browser = Watir::Browser.new :chrome
+  @browser = Watir::Browser.new :phantomjs
 
-  puts "Browser launched, going to C1000z EWS..."
+  log_message "Browser launched, going to C1000z EWS..."
 
   @browser.goto(@main_url)
 
-  puts "Time to login..."
+  log_message "Time to login..."
   login_page = LoginPage.new(@browser)
   login_page.login_to_system
 
-  puts "Navigating to the wireless setup page..."
+  log_message "Navigating to the wireless setup page..."
   index_page = IndexPage.new(@browser)
   index_page.view_wireless_setup
 
-  puts "On the wireless setup page...now we disable wireless...divs and such"
+  log_message "On the wireless setup page...now we disable wireless...divs and such"
   wireless_setup_page = WirelessSetupPage.new(@browser)
   wireless_setup_page.disable_wireless
 
-  puts "Now things are disabled, see if we can apply the settings..."
+  log_message "Now things are disabled, see if we can apply the settings..."
 
-  #puts "link[0]: #{wireless_setup_page.apply_wireless_settings_elements[0].text}"
-  #puts "link[1]: #{wireless_setup_page.apply_wireless_settings_elements[1].text}"
+  #log_message "link[0]: #{wireless_setup_page.apply_wireless_settings_elements[0].text}"
+  #log_message "link[1]: #{wireless_setup_page.apply_wireless_settings_elements[1].text}"
 
   wireless_setup_page.apply_wireless_settings_elements[1].click
 
-  wireless_setup_page.wait_until(20, 'Could not get the wireless settings page back.') do
+  wireless_setup_page.wait_until(10, 'Could not get the wireless settings page back.') do
     wireless_setup_page.text.include? 'Basic Settings'
   end
-  puts "Wireless is disabled...guess we re-enable it now!"
+
+  log_message "Wireless is disabled...re-enable it now!"
   
   wireless_setup_page.enable_wireless
+  wireless_setup_page.wait_until(10, 'Failed to get the page back after enabling.') do
+    wireless_setup_page.text.include? 'Change the network name'
+  end
 
-  #puts "link[0]: #{wireless_setup_page.apply_wireless_settings_elements[0].text}"
-  #puts "link[1]: #{wireless_setup_page.apply_wireless_settings_elements[1].text}"
+  #log_message "link[0]: #{wireless_setup_page.apply_wireless_settings_elements[0].text}"
+  #log_message "link[1]: #{wireless_setup_page.apply_wireless_settings_elements[1].text}"
 
   wireless_setup_page.apply_wireless_settings_elements[0].click
 
-  wireless_setup_page.wait_until(20, 'Could not get the wireless settings page back.') do
+  wireless_setup_page.wait_until(10, 'Could not get the wireless settings page back.') do
     wireless_setup_page.text.include? 'Basic Settings'
   end
-  puts "Wireless is enabled, we out!"
+
+  log_message "Wireless is enabled, we out!"
 
 rescue => exception
-  puts "Error during processing: #{$!}"
-  puts "Backtrace:\n\t#{exception.backtrace.join("\n\t")}"
+  log_message "Error during processing: #{$!}"
+  log_message "Backtrace:\n\t#{exception.backtrace.join("\n\t")}"
 end
 
-#@browser.close
+@browser.close
