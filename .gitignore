@@ -30,3 +30,7 @@ ATCSMon/ATCSMon-Image-Processor/ATCSMon-Image-Processor.v12.suo
 
 # Vagrant temp files and such:
 .vagrant
+
+*.exe
+*.mdb
+*.vscode
