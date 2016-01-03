@@ -10,15 +10,16 @@
 require 'watir-webdriver'
 require 'page-object'
 require 'rubygems'
-require 'time'
+require 'logger'
 
 require_relative 'login_page'
 require_relative 'index_page'
 require_relative 'wireless_setup_page'
 
+@logger = Logger.new('/tmp/c1000z-wireless-nudge.log', 0, 2 * 1024 * 1024)
+
 def log_message(msg)
-  current_time = Time.now.strftime("%Y-%m-%d %H:%M:%S")
-  puts "#{current_time}: #{msg}"
+  @logger.debug(msg)
 end
 
 # Main program.
