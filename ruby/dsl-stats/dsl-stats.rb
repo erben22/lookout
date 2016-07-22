@@ -54,8 +54,8 @@ end
 #auth = client.authorization
 # Follow "Create a client ID and client secret" in
 # https://developers.google.com/drive/web/auth/web-server] to get a client ID and client secret.
-#auth.client_id = '841799417229-c4vj7oivthqheaer9s93bbc59bj9hpg2.apps.googleusercontent.com'
-#auth.client_secret = 'lEauubow2zzHIrhKhpsp_0fh'
+#auth.client_id = 'foo.apps.googleusercontent.com'
+#auth.client_secret = 'bar'
 #auth.scope =
 #  "https://www.googleapis.com/auth/drive " +
 #    "https://spreadsheets.google.com/feeds/"
