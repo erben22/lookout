@@ -8,7 +8,7 @@
 require 'watir-webdriver'
 require 'page-object'
 require 'rubygems'
-require 'google/api_client'
+#require 'google/api_client'
 require 'google_drive'
 require 'time'
 
@@ -102,7 +102,8 @@ current_time = current_time.strftime("%Y-%m-%d %H:%M:%S")
 
 ws[row_index, 1] = current_time
 
-    modem_status.each do |key, value|
+modem_status.each do |key, value|
+  #puts "Storing value: #{value} in row #{column_index}:#{row_index}"
   ws[row_index, column_index] = value
   column_index += 1
 end
