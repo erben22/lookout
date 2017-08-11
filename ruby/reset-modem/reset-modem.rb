@@ -7,7 +7,6 @@
 # License::   TBD
 
 require 'watir-webdriver'
-#require 'watir'
 require 'page-object'
 require 'rubygems'
 require 'time'
@@ -15,7 +14,7 @@ require 'fileutils'
 
 require_relative 'login_page'
 require_relative 'index_page'
-require_relative 'modem_status_class'
+require_relative 'utilities_class'
 
 begin
   @main_url = 'http://192.168.2.1'
@@ -29,27 +28,16 @@ begin
   login_page.login_to_system
 
   index_page = IndexPage.new(@browser)
-  index_page.view_modem_status
+  index_page.view_utilities
 
-  modem_status_page = ModemStatusClass.new(@browser)
+  utilities_page = UtilitiesClass.new(@browser)
+  utilities_status = utilities_page.reboot_modem
 
-  modem_status = modem_status_page.get_modem_status
-  modem_status = modem_status.merge(modem_status_page.get_dsl_status)
-  modem_status = modem_status.merge(modem_status_page.get_internet_status)
-
-
-  puts "Complete modem status: #{modem_status}"
-
-  #puts "Hash iteration:"
-  #modem_status.each do |key, value|
-  #  puts "Key #{key}: #{value}"
-  #end
+  utilities_status = utilities_page.confirm_reboot
 
 rescue => exception
   puts "Error during processing: #{$!}"
   puts "Backtrace:\n\t#{exception.backtrace.join("\n\t")}"
 end
-
-# Now that we have status of the modem in it's current state, let's publish our data...
 
 @browser.close
