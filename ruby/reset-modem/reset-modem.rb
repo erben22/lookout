@@ -6,8 +6,8 @@
 # Copyright:: Copyright (c) 2017 Codebets
 # License::   TBD
 
-#require 'watir-webdriver'
-require 'watir'
+require 'watir-webdriver'
+#require 'watir'
 require 'page-object'
 require 'rubygems'
 require 'time'
@@ -20,8 +20,8 @@ require_relative 'modem_status_class'
 begin
   @main_url = 'http://192.168.2.1'
 
-  @browser = Watir::Browser.new :firefox
-  #@browser = Watir::Browser.new :phantomjs
+  #@browser = Watir::Browser.new :firefox
+  @browser = Watir::Browser.new :phantomjs
 
   @browser.goto(@main_url)
 
