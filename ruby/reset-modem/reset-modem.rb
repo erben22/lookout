@@ -6,7 +6,8 @@
 # Copyright:: Copyright (c) 2017 Codebets
 # License::   TBD
 
-require 'watir-webdriver'
+#require 'watir-webdriver'
+require 'watir'
 require 'page-object'
 require 'rubygems'
 require 'time'
